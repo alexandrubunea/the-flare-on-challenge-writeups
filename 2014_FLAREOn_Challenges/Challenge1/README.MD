@@ -85,4 +85,4 @@ if __name__ == "__main__":
         print(text)
 ```
 
-Executing this script successfully reveals the flag, which also serves as the password for the subsequent `2014 Flare-On Challenge 2` archive.
+Executing this script successfully reveals the flag.
