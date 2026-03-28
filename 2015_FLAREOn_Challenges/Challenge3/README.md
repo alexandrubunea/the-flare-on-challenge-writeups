@@ -53,7 +53,7 @@ This raises the question of whether the magic number in `elfie.pyc` has been tam
 
 The first four bytes are identical (`03 F3 0D 0A`) the correct Python 2.7 magic. The header is not the problem. Looking past the 8-byte header at the marshal body tells a different story: instead of a valid code object starting with `0x63` (`c`), `elfie.pyc` starts with `0x4F 0x30 0x4F 0x4F...`, not a marshal stream at all. The ASCII column reveals readable text and what appear to be base64 strings. The marshal body has been **replaced with obfuscated Python source code**.
 
-## 3. Dynamic Analysis
+## 3. Dynamic Analysis (Kind of? Not really running the application)
 
 Since `elfie.pyc` contains source rather than bytecode past its header, the approach is to strip the 8-byte `.pyc` header and treat the remainder as a Python script. The header is deleted in HxD and the file is saved as `elfie_body.py`.
 
