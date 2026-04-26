@@ -1,0 +1,122 @@
+# =============================================================================
+#  Site identity
+# =============================================================================
+title:          "The Flare-On Challenge Write-ups"
+tagline:        "Reverse engineering notes by Alexandru Bunea"
+description:    >-
+  A collection of detailed write-ups for the Flare-On reverse engineering
+  challenge series, covering static analysis, dynamic debugging, and
+  malware unpacking techniques.
+author:
+  name:         "Alexandru Bunea"
+  email:        ""                          # add if you want it in feeds
+  url:          "https://github.com/alexandrubunea"
+
+# =============================================================================
+#  URLs
+# =============================================================================
+url:            "https://github.com/alexandrubunea"
+baseurl:        ""                          # empty — site lives at the root
+github_username: alexandrubunea
+
+# =============================================================================
+#  Build settings
+# =============================================================================
+theme:          minima                      # swap for "jekyll-theme-chirpy" etc.
+markdown:       kramdown
+highlighter:    rouge
+
+kramdown:
+  input:              GFM                   # GitHub-Flavoured Markdown
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# =============================================================================
+#  Permalink style  →  /posts/flare-on-2014-challenge-1/
+# =============================================================================
+permalink: /posts/:title/
+
+# =============================================================================
+#  Pagination  (requires jekyll-paginate gem)
+# =============================================================================
+paginate:           10
+paginate_path:      "/page/:num/"
+
+# =============================================================================
+#  Plugins
+# =============================================================================
+plugins:
+  - jekyll-feed          # /feed.xml  — RSS/Atom for readers & GitHub Actions
+  - jekyll-sitemap       # /sitemap.xml — SEO
+  - jekyll-seo-tag       # <meta> tags injected via {% seo %} in your layout
+  - jekyll-paginate
+
+# =============================================================================
+#  Collections & defaults
+# =============================================================================
+defaults:
+  - scope:
+      path:   ""
+      type:   "posts"
+    values:
+      layout:      "post"
+      author:      "Alexandru Bunea"
+      show_date:   true
+      toc:         true              # table of contents (theme-dependent)
+      comments:    false
+
+# =============================================================================
+#  Categories / tags
+# =============================================================================
+# Posts use: categories: [Reverse Engineering, Flare-On]
+# Jekyll will auto-generate category pages if your theme supports them,
+# or you can add a categories layout manually.
+
+# =============================================================================
+#  Assets & static files
+# =============================================================================
+# PNGs under assets/images/ are served as-is; no processing needed.
+# Keep this section so Jekyll doesn't try to render binary files.
+include:
+  - assets/images
+
+# =============================================================================
+#  Exclusions  (never published to _site/)
+# =============================================================================
+exclude:
+  - "*.FLAREOn_Challenges"         # source write-up folders
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .gitignore
+  - .git
+  - node_modules
+  - vendor
+
+# =============================================================================
+#  Feed (jekyll-feed)
+# =============================================================================
+feed:
+  path:       feed.xml
+  categories:
+    - Reverse Engineering
+    - Flare-On Challenges
+
+# =============================================================================
+#  SEO (jekyll-seo-tag)
+# =============================================================================
+social:
+  name:       "Alexandru Bunea"
+  links:
+    - "https://github.com/alexandrubunea"
+
+# =============================================================================
+#  Minima theme overrides  (ignored if you switch themes)
+# =============================================================================
+minima:
+  skin:             dark            # dark | classic | solarized | solarized-dark
+  date_format:      "%B %-d, %Y"   # e.g. "November 3, 2024"
+  social_links:
+    - { platform: github, user_url: "https://github.com/alexandrubunea" }
