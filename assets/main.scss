@@ -123,17 +123,17 @@ code {
 //  Block code — ONE box, no nesting
 //
 //  Strategy:
-//    • All <pre> get dark colours but NO border (avoids the inner box).
-//    • Plain <pre> (no .highlight wrapper) adds its own border so it still
-//      looks like a box when Rouge didn't process the block.
-//    • .highlight provides the ONLY outer border for highlighted blocks.
+//    • All <pre> get dark colours AND a border.
+//    • <pre> inside .highlight loses its border — .highlight provides the
+//      single outer border instead. This reliably covers both plain blocks
+//      and Rouge-highlighted blocks regardless of nesting depth.
 // =============================================================================
 
-// Base: dark colours, no border
 pre {
   font-family: $code-font-family;
   background-color: #1e1e1e !important;
   color: #f8f8f2;
+  border: 1px solid #3a3a3a;
   border-radius: 6px;
   padding: 1em 1.2em;
   overflow-x: auto;
@@ -141,7 +141,6 @@ pre {
   line-height: 1.65;
   margin: 1.2em 0;
 
-  // Reset inline-code overrides inside a block
   code {
     background: none;
     border: none;
@@ -152,23 +151,17 @@ pre {
   }
 }
 
-// Plain pre (IDA listings, shell output, etc.) — add the single border here
-.post-content > pre,
-.page-content > pre,
-article > pre {
-  border: 1px solid #3a3a3a;
-}
-
-// Highlighted block — .highlight is the ONLY border; pre inside has none
 .highlight {
   background-color: #1e1e1e !important;
   border: 1px solid #3a3a3a;
   border-radius: 6px;
   margin: 1.2em 0;
 
-  pre, pre.highlight {
+  // Strip border from every pre inside .highlight — outer div is the box
+  pre {
     border: none !important;
-    border-radius: 0;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     margin: 0;
     padding: 1em 1.2em;
     background-color: #1e1e1e !important;
@@ -195,36 +188,4 @@ article > pre {
   .gd                { color: #f92672;                     }
   .gi                { color: #a6e22e;                     }
   .err               { color: #f92672; background: none;   }
-}
-
-// =============================================================================
-//  Lightbox
-// =============================================================================
-.lb-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.85);
-  z-index: 9999;
-  cursor: zoom-out;
-  align-items: center;
-  justify-content: center;
-}
-
-.lb-overlay.active { display: flex; }
-
-.lb-overlay img {
-  max-width: 92vw;
-  max-height: 92vh;
-  object-fit: contain;
-  border-radius: 4px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.7);
-}
-
-.post-content img,
-.page-content img {
-  cursor: zoom-in;
-  border-radius: 4px;
-  display: block;
-  max-width: 100%;
 }
