@@ -87,6 +87,7 @@ include:
 #  Exclusions  (never published to _site/)
 # =============================================================================
 exclude:
+  - restructure_ctf.py
   - "*.FLAREOn_Challenges"         # source write-up folders
   - Gemfile
   - Gemfile.lock
@@ -118,7 +119,6 @@ social:
 #  Minima theme overrides  (ignored if you switch themes)
 # =============================================================================
 minima:
-  skin:             solarized-dark  # dark | classic | solarized | solarized-dark
   date_format:      "%B %-d, %Y"   # e.g. "November 3, 2024"
   social_links:
     - { platform: github, user_url: "https://github.com/alexandrubunea" }
