@@ -277,7 +277,7 @@ If `scasb` finds a mismatch (`ZF=0`), `cmovnz cx, dx` zeroes out `CX` (since `dx
 
 Setting a breakpoint at the `scasb` instruction to confirm exactly which bytes are being compared:
 
-![Found the value stored in [EDI] in x32db and the memory dump](image-9.png)
+![Found the value stored in [EDI] in x32db and the memory dump]({{ "/assets/images/2015/Challenge2/image-9.png" | relative_url }})
 
 The memory dump confirms the target. And because EDI walks **backwards** through the buffer (net −1 per iteration):
 

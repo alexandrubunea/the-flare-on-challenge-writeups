@@ -2,7 +2,7 @@
 ---
 
 // =============================================================================
-//  Fonts — loaded before anything else
+//  Fonts
 // =============================================================================
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
@@ -25,12 +25,20 @@ $base-line-height:   1.7;
 @import "minima";
 
 // =============================================================================
-//  Global dark surface fixes
+//  Global
 // =============================================================================
 body {
   background-color: $background-color;
   color: $text-color;
   font-family: $base-font-family;
+}
+
+// Justified text everywhere it reads as prose
+.post-content p,
+.page-content p,
+.home p {
+  text-align: justify;
+  hyphens: auto;
 }
 
 a         { color: $link-base-color; }
@@ -45,7 +53,7 @@ hr {
 }
 
 // =============================================================================
-//  Header — title only
+//  Header
 // =============================================================================
 .site-header {
   background-color: #111;
@@ -61,7 +69,6 @@ hr {
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #e0e0e0 !important;
-
   &:visited { color: #e0e0e0 !important; }
   &:hover   { color: $brand-color !important; text-decoration: none; }
 }
@@ -100,10 +107,9 @@ hr {
 .post-link      { font-size: 1.1rem; }
 
 // =============================================================================
-//  Code — inline
+//  Inline code
 // =============================================================================
-code,
-p code, li code, td code, h1 code, h2 code, h3 code {
+code {
   font-family: $code-font-family;
   font-size: 0.85em;
   background-color: #2a2a2a;
@@ -114,63 +120,111 @@ p code, li code, td code, h1 code, h2 code, h3 code {
 }
 
 // =============================================================================
-//  Code — ALL block types (highlighted AND plain pre)
+//  Block code — ONE box, no nesting
+//
+//  Strategy:
+//    • All <pre> get dark colours but NO border (avoids the inner box).
+//    • Plain <pre> (no .highlight wrapper) adds its own border so it still
+//      looks like a box when Rouge didn't process the block.
+//    • .highlight provides the ONLY outer border for highlighted blocks.
 // =============================================================================
+
+// Base: dark colours, no border
 pre {
   font-family: $code-font-family;
   background-color: #1e1e1e !important;
   color: #f8f8f2;
-  border: 1px solid #3a3a3a;
   border-radius: 6px;
   padding: 1em 1.2em;
   overflow-x: auto;
   font-size: 0.85em;
   line-height: 1.65;
+  margin: 1.2em 0;
 
-  // reset inline code styling inside pre
+  // Reset inline-code overrides inside a block
   code {
     background: none;
     border: none;
     padding: 0;
     font-size: inherit;
     color: inherit;
+    border-radius: 0;
   }
 }
 
+// Plain pre (IDA listings, shell output, etc.) — add the single border here
+.post-content > pre,
+.page-content > pre,
+article > pre {
+  border: 1px solid #3a3a3a;
+}
+
+// Highlighted block — .highlight is the ONLY border; pre inside has none
 .highlight {
   background-color: #1e1e1e !important;
-  border-radius: 6px;
   border: 1px solid #3a3a3a;
+  border-radius: 6px;
   margin: 1.2em 0;
 
   pre, pre.highlight {
-    background-color: #1e1e1e !important;
-    border: none;
+    border: none !important;
     border-radius: 0;
     margin: 0;
     padding: 1em 1.2em;
+    background-color: #1e1e1e !important;
   }
 
   table td { border: none; }
 
-  // Line numbers
   .lineno { color: #555; user-select: none; padding-right: 1.2em; }
 
-  // Rouge Monokai token colors
-  .c, .c1, .cm, .cs { color: #75715e; font-style: italic; } // comments
+  // Rouge — Monokai
+  .c, .c1, .cm, .cs { color: #75715e; font-style: italic; }
   .k, .kd, .kn, .kp,
-  .kr, .kt           { color: #f92672; font-weight: 500;   } // keywords
+  .kr, .kt           { color: #f92672; font-weight: 500;   }
   .s, .s1, .s2, .sb,
   .sc, .sd, .se, .sh,
-  .si, .sx           { color: #e6db74;                     } // strings
+  .si, .sx           { color: #e6db74;                     }
   .m, .mf, .mh, .mi,
-  .mo, .il           { color: #ae81ff;                     } // numbers
+  .mo, .il           { color: #ae81ff;                     }
   .na, .nb, .nc, .nd,
   .ni, .ne, .nf, .nl,
-  .nn, .nt, .nv      { color: #a6e22e;                     } // names/functions
-  .o,  .ow           { color: #f92672;                     } // operators
-  .p,  .pi           { color: #f8f8f2;                     } // punctuation
-  .gd                { color: #f92672;                     } // diff deleted
-  .gi                { color: #a6e22e;                     } // diff inserted
-  .err               { color: #f92672; background: none;   } // errors
+  .nn, .nt, .nv      { color: #a6e22e;                     }
+  .o,  .ow           { color: #f92672;                     }
+  .p,  .pi           { color: #f8f8f2;                     }
+  .gd                { color: #f92672;                     }
+  .gi                { color: #a6e22e;                     }
+  .err               { color: #f92672; background: none;   }
+}
+
+// =============================================================================
+//  Lightbox
+// =============================================================================
+.lb-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 9999;
+  cursor: zoom-out;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb-overlay.active { display: flex; }
+
+.lb-overlay img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+}
+
+.post-content img,
+.page-content img {
+  cursor: zoom-in;
+  border-radius: 4px;
+  display: block;
+  max-width: 100%;
 }
