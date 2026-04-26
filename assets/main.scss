@@ -2,48 +2,42 @@
 ---
 
 // =============================================================================
-//  Dark theme variable overrides — must come BEFORE @import "minima"
+//  Fonts — loaded before anything else
 // =============================================================================
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
+// =============================================================================
+//  Dark theme variables — must come BEFORE @import "minima"
+// =============================================================================
 $background-color:   #1a1a1a;
 $text-color:         #d4d4d4;
 $brand-color:        #6fa3d8;
-$grey-color:         #888;
+$grey-color:         #777;
 $grey-color-light:   #2e2e2e;
 $grey-color-dark:    #bbb;
 $link-base-color:    #6fa3d8;
 $link-visited-color: #9b72cf;
+$base-font-family:   "Inter", system-ui, sans-serif;
+$code-font-family:   "JetBrains Mono", "Fira Code", monospace;
+$base-font-size:     16px;
+$base-line-height:   1.7;
 
 @import "minima";
 
 // =============================================================================
-//  Global dark surface fixes minima doesn't cover via variables
+//  Global dark surface fixes
 // =============================================================================
-
 body {
   background-color: $background-color;
   color: $text-color;
+  font-family: $base-font-family;
 }
 
-.site-header {
-  background-color: #111;
-  border-top: 4px solid #3a3a3a;
-  border-bottom: 1px solid #2e2e2e;
+a         { color: $link-base-color; }
+a:visited { color: $link-visited-color; }
+a:hover   { color: lighten($link-base-color, 15%); text-decoration: underline; }
 
-  .site-title,
-  .site-title:visited { color: #e0e0e0; }
-
-  .page-link { color: #c0c0c0; }
-}
-
-.site-footer {
-  background-color: #111;
-  border-top: 1px solid #2e2e2e;
-  color: $grey-color;
-}
-
-.post-list > li    { border-bottom: 1px solid #2a2a2a; }
-.post-meta         { color: $grey-color; }
+h1, h2, h3, h4, h5, h6 { color: #e8e8e8; font-weight: 600; }
 
 hr {
   border: none;
@@ -51,21 +45,98 @@ hr {
 }
 
 // =============================================================================
-//  Code blocks — Monokai dark
+//  Header — title only
 // =============================================================================
+.site-header {
+  background-color: #111;
+  border-top: 3px solid $brand-color;
+  border-bottom: 1px solid #2a2a2a;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
 
-// Inline code
-code.language-plaintext,
-p code, li code, td code {
+.site-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #e0e0e0 !important;
+
+  &:visited { color: #e0e0e0 !important; }
+  &:hover   { color: $brand-color !important; text-decoration: none; }
+}
+
+// =============================================================================
+//  Footer
+// =============================================================================
+.site-footer {
+  background-color: #111;
+  border-top: 1px solid #2a2a2a;
+  padding: 1.5rem 0;
+  color: $grey-color;
+  font-size: 0.85rem;
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .footer-description { margin: 0; }
+
+  .footer-github a {
+    color: $grey-color;
+    &:hover { color: $brand-color; }
+  }
+}
+
+// =============================================================================
+//  Post list
+// =============================================================================
+.post-list > li { border-bottom: 1px solid #252525; padding-bottom: 0.8rem; }
+.post-meta      { color: $grey-color; font-size: 0.82rem; }
+.post-link      { font-size: 1.1rem; }
+
+// =============================================================================
+//  Code — inline
+// =============================================================================
+code,
+p code, li code, td code, h1 code, h2 code, h3 code {
+  font-family: $code-font-family;
+  font-size: 0.85em;
   background-color: #2a2a2a;
   color: #f8f8f2;
   border: 1px solid #3a3a3a;
   border-radius: 3px;
-  padding: 1px 5px;
-  font-size: 0.88em;
+  padding: 2px 6px;
 }
 
-// Fenced / highlighted blocks
+// =============================================================================
+//  Code — ALL block types (highlighted AND plain pre)
+// =============================================================================
+pre {
+  font-family: $code-font-family;
+  background-color: #1e1e1e !important;
+  color: #f8f8f2;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  font-size: 0.85em;
+  line-height: 1.65;
+
+  // reset inline code styling inside pre
+  code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+}
+
 .highlight {
   background-color: #1e1e1e !important;
   border-radius: 6px;
@@ -74,23 +145,21 @@ p code, li code, td code {
 
   pre, pre.highlight {
     background-color: #1e1e1e !important;
-    color: #f8f8f2;
-    padding: 1em 1.2em;
+    border: none;
+    border-radius: 0;
     margin: 0;
-    overflow-x: auto;
-    font-size: 0.87em;
-    line-height: 1.65;
+    padding: 1em 1.2em;
   }
 
   table td { border: none; }
 
   // Line numbers
-  .lineno { color: #555; user-select: none; padding-right: 1em; }
+  .lineno { color: #555; user-select: none; padding-right: 1.2em; }
 
   // Rouge Monokai token colors
   .c, .c1, .cm, .cs { color: #75715e; font-style: italic; } // comments
   .k, .kd, .kn, .kp,
-  .kr, .kt           { color: #f92672; font-weight: bold;  } // keywords
+  .kr, .kt           { color: #f92672; font-weight: 500;   } // keywords
   .s, .s1, .s2, .sb,
   .sc, .sd, .se, .sh,
   .si, .sx           { color: #e6db74;                     } // strings
