@@ -121,19 +121,21 @@ code {
 
 // =============================================================================
 //  Block code — ONE box, no nesting
-//
-//  Strategy:
-//    • All <pre> get dark colours AND a border.
-//    • <pre> inside .highlight loses its border — .highlight provides the
-//      single outer border instead. This reliably covers both plain blocks
-//      and Rouge-highlighted blocks regardless of nesting depth.
 // =============================================================================
+.highlighter-rouge,
+div.highlight,
+figure.highlight {
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
 pre {
   font-family: $code-font-family;
   background-color: #1e1e1e !important;
   color: #f8f8f2;
-  border: 1px solid #3a3a3a;
+  border: 1px solid #3a3a3a !important;
   border-radius: 6px;
   padding: 1em 1.2em;
   overflow-x: auto;
@@ -142,8 +144,8 @@ pre {
   margin: 1.2em 0;
 
   code {
-    background: none;
-    border: none;
+    background: transparent !important;
+    border: none !important;
     padding: 0;
     font-size: inherit;
     color: inherit;
@@ -152,40 +154,24 @@ pre {
 }
 
 .highlight {
-  background-color: #1e1e1e !important;
-  border: 1px solid #3a3a3a;
-  border-radius: 6px;
-  margin: 1.2em 0;
-
-  // Strip border from every pre inside .highlight — outer div is the box
-  pre {
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    margin: 0;
-    padding: 1em 1.2em;
-    background-color: #1e1e1e !important;
-  }
-
   table td { border: none; }
 
   .lineno { color: #555; user-select: none; padding-right: 1.2em; }
 
-  // Rouge — Monokai
   .c, .c1, .cm, .cs { color: #75715e; font-style: italic; }
   .k, .kd, .kn, .kp,
-  .kr, .kt           { color: #f92672; font-weight: 500;   }
+  .kr, .kt          { color: #f92672; font-weight: 500;   }
   .s, .s1, .s2, .sb,
   .sc, .sd, .se, .sh,
-  .si, .sx           { color: #e6db74;                     }
+  .si, .sx          { color: #e6db74;                     }
   .m, .mf, .mh, .mi,
-  .mo, .il           { color: #ae81ff;                     }
+  .mo, .il          { color: #ae81ff;                     }
   .na, .nb, .nc, .nd,
   .ni, .ne, .nf, .nl,
-  .nn, .nt, .nv      { color: #a6e22e;                     }
-  .o,  .ow           { color: #f92672;                     }
-  .p,  .pi           { color: #f8f8f2;                     }
-  .gd                { color: #f92672;                     }
-  .gi                { color: #a6e22e;                     }
-  .err               { color: #f92672; background: none;   }
+  .nn, .nt, .nv     { color: #a6e22e;                     }
+  .o,  .ow          { color: #f92672;                     }
+  .p,  .pi          { color: #f8f8f2;                     }
+  .gd               { color: #f92672;                     }
+  .gi               { color: #a6e22e;                     }
+  .err              { color: #f92672; background: none;   }
 }
