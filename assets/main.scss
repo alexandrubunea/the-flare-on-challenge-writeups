@@ -133,7 +133,24 @@ figure.highlight {
 
 pre {
   font-family: $code-font-family;
+  background-color: #1e1e1e !important;
+  color: #f8f8f2;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  overflow-x: auto;
   font-size: 0.85em;
+  line-height: 1.65;
+  margin: 1.2em 0;
+
+  code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    border-radius: 0;
+  }
 }
 
 .highlight {
