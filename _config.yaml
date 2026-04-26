@@ -15,8 +15,8 @@ author:
 # =============================================================================
 #  URLs
 # =============================================================================
-url:            "https://github.com/alexandrubunea"
-baseurl:        ""                          # empty — site lives at the root
+url:            "https://alexandrubunea.github.io"
+baseurl:        "/the-flare-on-challenge-writeups"
 github_username: alexandrubunea
 
 # =============================================================================
@@ -102,11 +102,12 @@ feed:
   path:       feed.xml
   categories:
     - Reverse Engineering
-    - Flare-On Challenges
 
 # =============================================================================
 #  SEO (jekyll-seo-tag)
 # =============================================================================
+twitter:
+  username:   ""                    # add your handle if relevant
 social:
   name:       "Alexandru Bunea"
   links:

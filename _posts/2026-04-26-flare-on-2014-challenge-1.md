@@ -3,6 +3,8 @@ layout: post
 title: "Flare-On 2014 - Challenge 1"
 date: 2026-04-26 12:35:15 +0200
 categories: [Reverse Engineering, Flare-On]
+challenge_year: 2014
+challenge_num: 1
 ---
 # 2014 Flare-On Challenge 1
 

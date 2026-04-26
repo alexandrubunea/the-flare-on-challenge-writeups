@@ -31,7 +31,7 @@ My other work and notes live on **[GitHub](https://github.com/alexandrubunea)**.
 
 ## Write-ups
 
-{% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+{% assign posts_by_year = site.posts | group_by_exp: "post", "post.challenge_year" | sort: "name" | reverse %}
 {% for year_group in posts_by_year %}
 ### Flare-On {{ year_group.name }}
 

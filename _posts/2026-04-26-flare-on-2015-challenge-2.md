@@ -3,6 +3,8 @@ layout: post
 title: "Flare-On 2015 - Challenge 2"
 date: 2026-04-26 12:35:15 +0200
 categories: [Reverse Engineering, Flare-On]
+challenge_year: 2015
+challenge_num: 2
 ---
 # 2015 Flare-On Challenge 2
 *All the Flare-On annual challenges can be found [here](https://flare-on.com/).*
