@@ -58,7 +58,7 @@ DIE reveals that the binary was written in assembly, meaning the Ghidra decompil
 
 Loading the binary in IDA Free and examining the entry point reveals the following assembly:
 
-```x86asm
+```nasm
 push    ebp
 mov     ebp, esp
 sub     esp, 10h
@@ -102,7 +102,7 @@ The graph reveals a loop that XORs each byte of the user's input against the key
 
 Double-clicking the reference to the encrypted buffer in IDA navigates directly to it in the `.data` segment:
 
-```x86asm
+```nasm
 .data:00402140 byte_402140     db 1Fh                  ; DATA XREF: start+55↑r
 .data:00402141                 db    8
 .data:00402142                 db  13h

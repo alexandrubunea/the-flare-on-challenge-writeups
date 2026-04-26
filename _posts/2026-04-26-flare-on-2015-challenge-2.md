@@ -34,7 +34,7 @@ When dealing with hand-crafted assembly binaries, IDA Free tends to give cleaner
 
 The entry point is minimal:
 
-```x86asm
+```nasm
 public start
 start proc near
 call    sub_401000
@@ -49,7 +49,7 @@ The only meaningful thing happening here is the call to `sub_401000`, so let's f
 
 ### sub_401000 - The Main Routine
 
-```x86asm
+```nasm
 sub_401000 proc near
 pop     eax             ; suspicious, why pop before anything else?
 push    ebp
@@ -99,7 +99,7 @@ The `test eax, eax` / `jz` pattern means: if `sub_401084` returns 0, take the fa
 
 ### sub_401084 - The Validation Routine
 
-```x86asm
+```nasm
 sub_401084 proc near
 
 var_C= byte ptr -0Ch
@@ -166,7 +166,7 @@ A few things stand out immediately.
 
 First, the minimum length check:
 
-```x86asm
+```nasm
 mov     ecx, 25h
 cmp     [ebp+arg_8], ecx
 jl      short loc_4010D7
@@ -178,7 +178,7 @@ Second, `edi` is set to the end of whatever buffer `arg_0` points at, and `sub e
 
 Third, there is some interesting data sitting at the bottom of the `.text` section:
 
-```x86asm
+```nasm
 .text:004010E9    db 0AAh, 0ECh, 0A4h
 .text:004010EC    dd 0AAAEAFBAh, 0B0A7C08Ah, 0A5BA9ABCh, 0B8AFBAA5h, 0AEF9B89Dh
 .text:00401100    dd 0BCB4AB9Dh, 9A90B3B6h, 0A8h, 3Dh dup(0)
@@ -195,7 +195,7 @@ Opening the binary in x32dbg and running up to the point where `sub_401084` is c
 
 After the two `mov` instructions load `esi` and `edi`:
 
-```x86asm
+```nasm
 mov     esi, [ebp+arg_4]
 mov     edi, [ebp+arg_0]
 ```
@@ -228,13 +228,13 @@ Now let's break down what happens to each input character inside the loop.
 
 The XOR line:
 
-```x86asm
+```nasm
 xor al, [esp+10h+var_C]
 ```
 
 `var_C = -0x0C`, so this simplifies to:
 
-```x86asm
+```nasm
 xor al, [esp + 4]
 ```
 
@@ -258,7 +258,7 @@ Putting it all together, the transformation applied to each character is:
 
 The `bx` register accumulates the transformed value from each iteration:
 
-```x86asm
+```nasm
 add bx, ax
 ```
 
