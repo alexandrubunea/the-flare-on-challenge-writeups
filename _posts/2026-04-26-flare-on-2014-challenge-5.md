@@ -20,11 +20,11 @@ This write-up covers the fifth challenge of the 2014 Flare-On series. The object
 
 First let's see what exiftool says about this file:
 
-![exiftool details about the file](/assets/images/2014/Challenge5/image.png)
+![exiftool details about the file]({{ "/assets/images/2014/Challenge5/image.png" | relative_url }})
 
 Looks like it's a DLL file, but I want to also drop it into DIE:
 
-![DIE details about the file](/assets/images/2014/Challenge5/image-1.png)
+![DIE details about the file]({{ "/assets/images/2014/Challenge5/image-1.png" | relative_url }})
 
 Now I'll rename the file to add the `.dll` extension.
 

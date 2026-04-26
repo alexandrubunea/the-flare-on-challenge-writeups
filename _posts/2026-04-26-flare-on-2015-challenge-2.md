@@ -20,11 +20,11 @@ This write-up covers the second challenge of the 2015 Flare-On series. The objec
 
 The file arrives with no extension, always a reason to be cautious before running anything. Starting with exiftool:
 
-![exiftool result](/assets/images/2015/Challenge2/image.png)
+![exiftool result]({{ "/assets/images/2015/Challenge2/image.png" | relative_url }})
 
 Very small executable. Could be stripped of the standard library, or written directly in assembly. Running it through DIE to find out:
 
-![DIE result](/assets/images/2015/Challenge2/image-1.png)
+![DIE result]({{ "/assets/images/2015/Challenge2/image-1.png" | relative_url }})
 
 And indeed, it is written in assembly. Time to open it in a disassembler.
 
@@ -93,7 +93,7 @@ There is an unusual `pop eax` right at the start of the routine, before the stan
 
 The program writes a prompt to stdout, reads input from stdin into a buffer, passes that input to a validation subroutine `sub_401084`, and then branches depending on the return value. The structure is clear:
 
-![Program branching](/assets/images/2015/Challenge2/image-2.png)
+![Program branching]({{ "/assets/images/2015/Challenge2/image-2.png" | relative_url }})
 
 The `test eax, eax` / `jz` pattern means: if `sub_401084` returns 0, take the failure branch. So the goal is to understand what `sub_401084` accepts.
 
@@ -202,15 +202,15 @@ mov     edi, [ebp+arg_0]
 
 The register state looks like this:
 
-![State of registers](/assets/images/2015/Challenge2/image-3.png)
+![State of registers]({{ "/assets/images/2015/Challenge2/image-3.png" | relative_url }})
 
 `ESI` holds the user input. `EDI` points somewhere into the program's own code, let's look at what's there:
 
-![What is present at 004010E4](/assets/images/2015/Challenge2/image-4.png)
+![What is present at 004010E4]({{ "/assets/images/2015/Challenge2/image-4.png" | relative_url }})
 
 Running a few more instructions reveals the full content that EDI is pointing to:
 
-![Data from EDI](/assets/images/2015/Challenge2/image-5.png)
+![Data from EDI]({{ "/assets/images/2015/Challenge2/image-5.png" | relative_url }})
 
 Those bytes match exactly the mystery data from the static analysis. So the loop is walking the user input byte by byte, transforming each character, and comparing it against these hardcoded encrypted bytes. That is the target.
 
@@ -218,7 +218,7 @@ Those bytes match exactly the mystery data from the static analysis. So the loop
 
 Earlier there was that odd `pop eax` at the very beginning of `sub_401000`. Setting a breakpoint there to inspect it:
 
-![Checking pop eax](/assets/images/2015/Challenge2/image-6.png)
+![Checking pop eax]({{ "/assets/images/2015/Challenge2/image-6.png" | relative_url }})
 
 It is the same address range as EDI. The program is reading from **its own code**. Those bytes in `.text:004010E9` are not dead data, they serve double duty as both instructions and the encrypted password buffer. The `pop eax` is effectively loading the address of the program's own body so it can later be used as the comparison target in `sub_401084`.
 
@@ -240,11 +240,11 @@ xor al, [esp + 4]
 
 Let's look at what is on the stack at that point:
 
-![Value stored at the top of the stack](/assets/images/2015/Challenge2/image-7.png)
+![Value stored at the top of the stack]({{ "/assets/images/2015/Challenge2/image-7.png" | relative_url }})
 
 Tracing it back: just before the XOR, `push eax` was executed with `AX = 0x1C7`:
 
-![Disassembly code of push eax](/assets/images/2015/Challenge2/image-8.png)
+![Disassembly code of push eax]({{ "/assets/images/2015/Challenge2/image-8.png" | relative_url }})
 
 The XOR operates on `AL` only (the low byte), so the effective XOR key is **`0xC7`**.
 
@@ -281,7 +281,7 @@ Setting a breakpoint at the `scasb` instruction to confirm exactly which bytes a
 
 The memory dump confirms the target. And because EDI walks **backwards** through the buffer (net −1 per iteration):
 
-![Image of sub edi, 2](/assets/images/2015/Challenge2/image-10.png)
+![Image of sub edi, 2]({{ "/assets/images/2015/Challenge2/image-10.png" | relative_url }})
 
 Reading the 37 target bytes from the memory dump in reverse order:
 

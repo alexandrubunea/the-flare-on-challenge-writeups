@@ -31,17 +31,17 @@ The challenge ships with two files: `sender` and `challenge.pcap`. The `.pcap` i
 
 Running `exiftool` on the file:
 
-![exiftool result on the program](/assets/images/2015/Challenge5/image.png)
+![exiftool result on the program]({{ "/assets/images/2015/Challenge5/image.png" | relative_url }})
 
 Then running DIE:
 
-![die result on the program](/assets/images/2015/Challenge5/image-1.png)
+![die result on the program]({{ "/assets/images/2015/Challenge5/image-1.png" | relative_url }})
 
 The file is a 32-bit Windows binary compiled with Microsoft Visual C/C++. The extension is absent, so the file is renamed to `sender.exe` before further analysis.
 
 Running `strings` on the binary surfaces several immediately interesting fragments:
 
-![strings result on the program](/assets/images/2015/Challenge5/image-2.png)
+![strings result on the program]({{ "/assets/images/2015/Challenge5/image-2.png" | relative_url }})
 
 The output hints at HTTP communication and the presence of a key file. This already suggests a picture: `sender.exe` reads a key, encodes it in some way, and sends it over the network. The `challenge.pcap` likely contains the traffic that was produced when the binary was run.
 
@@ -49,19 +49,19 @@ The output hints at HTTP communication and the presence of a key file. This alre
 
 The binary is loaded into Ghidra. Navigating the typical entry point chain for a MSVC binary leads to `main`:
 
-![Main function in Ghidra](/assets/images/2015/Challenge5/image-3.png)
+![Main function in Ghidra]({{ "/assets/images/2015/Challenge5/image-3.png" | relative_url }})
 
 The function is renamed accordingly. Two internal functions immediately stand out during initial exploration.
 
 The first is a custom encoding routine:
 
-![Custom encoder found](/assets/images/2015/Challenge5/image-4.png)
+![Custom encoder found]({{ "/assets/images/2015/Challenge5/image-4.png" | relative_url }})
 
 The structure suggests a base64-like operation but with a non-standard alphabet. It is renamed `custom_encoder` for now and revisited later.
 
 The second is a function that attempts to connect to a host:
 
-![Trying to connect to a host](/assets/images/2015/Challenge5/image-5.png)
+![Trying to connect to a host]({{ "/assets/images/2015/Challenge5/image-5.png" | relative_url }})
 
 The target is `127.0.0.1`, confirming that the binary was designed to communicate locally. Whatever it sends to that host should be present in `challenge.pcap`.
 
@@ -87,7 +87,7 @@ Ghidra misreads the signature, but the logic is clear: `param_1` is a `char*` bu
 
 With the renamed signature in place, `main` becomes significantly more readable:
 
-![apply_flarebearstare function after modifying the signature](/assets/images/2015/Challenge5/image-6.png)
+![apply_flarebearstare function after modifying the signature]({{ "/assets/images/2015/Challenge5/image-6.png" | relative_url }})
 
 The full decompiled `main` now reads:
 
@@ -199,11 +199,11 @@ With the encoding pipeline fully mapped, the next step is to recover the encoded
 
 Opening the capture in Wireshark and filtering for HTTP traffic:
 
-![http requests inside WireShark](/assets/images/2015/Challenge5/image-7.png)
+![http requests inside WireShark]({{ "/assets/images/2015/Challenge5/image-7.png" | relative_url }})
 
 The POST request bodies need to be extracted and concatenated in order:
 
-![Data that needs concatenation](/assets/images/2015/Challenge5/image-8.png)
+![Data that needs concatenation]({{ "/assets/images/2015/Challenge5/image-8.png" | relative_url }})
 
 Assembling the body bytes in sequence produces the following hex string:
 
@@ -213,7 +213,7 @@ Assembling the body bytes in sequence produces the following hex string:
 
 Converting the hex back to ASCII yields:
 
-![Using rapidtables.com to see the string in ASCII](/assets/images/2015/Challenge5/image-9.png)
+![Using rapidtables.com to see the string in ASCII]({{ "/assets/images/2015/Challenge5/image-9.png" | relative_url }})
 
 ```
 UDYs1D7bNmdE1o3g5ms1V6RrYCVvODJF1DpxKTxAJ9xuZW==
@@ -256,6 +256,6 @@ print(f"The flag is {flag}")
 
 Running the script:
 
-![Result of running the script](/assets/images/2015/Challenge5/image-10.png)
+![Result of running the script]({{ "/assets/images/2015/Challenge5/image-10.png" | relative_url }})
 
 **Flag: `Sp1cy_7_layer_OSI_dip@flare-on.com`**

@@ -22,11 +22,11 @@ This write-up covers the first challenge of the 2015 Flare-On series. The object
 
 At first glance, the program resembles an installer based on its icon. Running exiftool confirms this suspicion, the binary is a cabinet self-extractor, and its product name field is set to "Internet Explorer," a common disguise for malicious software.
 
-![exiftool output of the program](/assets/images/2015/Challenge1/image.png)
+![exiftool output of the program]({{ "/assets/images/2015/Challenge1/image.png" | relative_url }})
 
 Detect It Easy (DIE) corroborates this finding, identifying the file as a cabinet-based self-extractor.
 
-![DIE output of the program](/assets/images/2015/Challenge1/image-1.png)
+![DIE output of the program]({{ "/assets/images/2015/Challenge1/image-1.png" | relative_url }})
 
 ## 2. Unpacking the Cabinet
 
@@ -46,9 +46,9 @@ i_am_happy_you_are_to_playing_the_flareon_challenge.exe
 
 Before diving into disassembly, exiftool and DIE are run against the extracted executable to understand its nature.
 
-![exiftool output of the extracted executable](/assets/images/2015/Challenge1/image-2.png)
+![exiftool output of the extracted executable]({{ "/assets/images/2015/Challenge1/image-2.png" | relative_url }})
 
-![DIE output of the extracted executable](/assets/images/2015/Challenge1/image-3.png)
+![DIE output of the extracted executable]({{ "/assets/images/2015/Challenge1/image-3.png" | relative_url }})
 
 DIE reveals that the binary was written in assembly, meaning the Ghidra decompiler would produce limited useful output. IDA Free is a better choice here, as it excels at presenting raw assembly in a readable, structured form.
 
@@ -92,7 +92,7 @@ The program uses `WriteFile` to print a password prompt and `ReadFile` to collec
 
 Switching to IDA's graph view makes the program's logic immediately clear.
 
-![Graph view of the program's control flow](/assets/images/2015/Challenge1/image-4.png)
+![Graph view of the program's control flow]({{ "/assets/images/2015/Challenge1/image-4.png" | relative_url }})
 
 The graph reveals a loop that XORs each byte of the user's input against the key `0x7D`. The resulting ciphertext is then compared byte-by-byte against a hardcoded encrypted string stored in the `.data` segment. Any mismatch causes the program to branch to a failure path. The flag is never stored in plaintext, only its XOR-encrypted form is embedded in the binary.
 

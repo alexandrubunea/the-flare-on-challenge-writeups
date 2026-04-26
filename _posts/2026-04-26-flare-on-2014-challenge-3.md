@@ -20,15 +20,15 @@ This write-up covers the third challenge of the 2014 Flare-On series. The object
 
 First let's see what we are dealing with. Running exiftool on the file:
 
-![Details from exiftool](/assets/images/2014/Challenge3/image.png)
+![Details from exiftool]({{ "/assets/images/2014/Challenge3/image.png" | relative_url }})
 
 Good, but not enough. Running it through DIE as well:
 
-![Details from DIE](/assets/images/2014/Challenge3/image-1.png)
+![Details from DIE]({{ "/assets/images/2014/Challenge3/image-1.png" | relative_url }})
 
 So it's an .exe file, we can add the extension to the file now. It's also a very light file. Let's run it and see what happens:
 
-![Running the program](/assets/images/2014/Challenge3/image-2.png)
+![Running the program]({{ "/assets/images/2014/Challenge3/image-2.png" | relative_url }})
 
 Not much to go on. Time to open it in a disassembler.
 
@@ -80,7 +80,7 @@ Binary Ninja splits the buffer into two variables due to its size, but it is one
 
 Opening the binary in x32dbg and setting a breakpoint at `0040249b`, then stepping into the function reveals the following assembly:
 
-![Hidden assembly code](/assets/images/2014/Challenge3/image-4.png)
+![Hidden assembly code]({{ "/assets/images/2014/Challenge3/image-4.png" | relative_url }})
 
 The shellcode begins with a classic position-independent self-location trick (`CALL $+5` / `MOV ESI, [ESP]`), followed by a XOR decoding loop:
 
@@ -98,17 +98,17 @@ The key is `0x66` and the loop runs for `0x1DF` (479) iterations, decoding every
 
 Setting a second breakpoint at `0019FD4B`, right after the loop exits, lets the CPU do all the decoding work in one shot:
 
-![Setting 2nd breakpoint](/assets/images/2014/Challenge3/image-5.png)
+![Setting 2nd breakpoint]({{ "/assets/images/2014/Challenge3/image-5.png" | relative_url }})
 
 Inspecting the memory dump at that point reveals the first decoded string:
 
-![Memory dump](/assets/images/2014/Challenge3/image-6.png)
+![Memory dump]({{ "/assets/images/2014/Challenge3/image-6.png" | relative_url }})
 
 `"and so it begins"` a marker confirming the first decoding stage completed successfully.
 
 Continuing to step through the program, the shellcode contains **multiple chained XOR decoding stages**, each one decoding the next layer using a different key (`nopasaurus`, `bOlG`, `omg is it almost over?!?`). Rather than manually reversing each stage, stepping through lets the program decode everything in memory naturally:
 
-![Keep stepping into the program](/assets/images/2014/Challenge3/image-7.png)
+![Keep stepping into the program]({{ "/assets/images/2014/Challenge3/image-7.png" | relative_url }})
 
 The flag becomes visible directly in the memory dump.
 

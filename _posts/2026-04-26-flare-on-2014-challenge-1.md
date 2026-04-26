@@ -20,16 +20,16 @@ This write-up covers the first challenge of the 2014 Flare-On series. The object
 ## 1. Initial Triage (Dynamic Analysis)
 Running the executable in an isolated environment reveals a standard .NET Windows Forms interface.
 
-![The first run of the program](/assets/images/2014/Challenge1/image.png)
+![The first run of the program]({{ "/assets/images/2014/Challenge1/image.png" | relative_url }})
 
 Clicking the "DECODE" button alters the image and displays a garbled text string. This indicates that a decryption or transformation routine is triggered by the button click event.
 
-![The program after pressing DECODE](/assets/images/2014/Challenge1/image-1.png)
+![The program after pressing DECODE]({{ "/assets/images/2014/Challenge1/image-1.png" | relative_url }})
 
 ## 2. Static Analysis
 Loading the executable into dnSpy confirms it is a standard, unobfuscated .NET assembly. The core logic of the application is easily locatable within the `btnDecode_Click` event handler.
 
-![The program opened in dnSpy](/assets/images/2014/Challenge1/image-2.png)
+![The program opened in dnSpy]({{ "/assets/images/2014/Challenge1/image-2.png" | relative_url }})
 
 Analyzing the `btnDecode_Click` function reveals the following C# routine:
 
@@ -74,7 +74,7 @@ While dynamically patching the binary (e.g., modifying `this.lbl_title.Text = te
 
 First, the `dat_secret` payload is extracted directly via dnSpy's resource manager and saved as `secret.encode`.
 
-![How to save the resource from the program](/assets/images/2014/Challenge1/image-3.png)
+![How to save the resource from the program]({{ "/assets/images/2014/Challenge1/image-3.png" | relative_url }})
 
 Next, the first `foreach` loop from the C# code is ported into a Python script to reproduce the initial decryption logic and output the unmangled flag.
 

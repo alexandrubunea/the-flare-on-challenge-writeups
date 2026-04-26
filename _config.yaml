@@ -7,10 +7,7 @@ description:    >-
   A collection of detailed write-ups for the Flare-On reverse engineering
   challenge series, covering static analysis, dynamic debugging, and
   malware unpacking techniques.
-author:
-  name:         "Alexandru Bunea"
-  email:        ""                          # add if you want it in feeds
-  url:          "https://github.com/alexandrubunea"
+author: "Alexandru Bunea"
 
 # =============================================================================
 #  URLs
@@ -18,6 +15,10 @@ author:
 url:            "https://alexandrubunea.github.io"
 baseurl:        "/the-flare-on-challenge-writeups"
 github_username: alexandrubunea
+
+# Only show these pages in the nav header
+header_pages:
+  - index.md
 
 # =============================================================================
 #  Build settings
@@ -117,7 +118,7 @@ social:
 #  Minima theme overrides  (ignored if you switch themes)
 # =============================================================================
 minima:
-  skin:             dark            # dark | classic | solarized | solarized-dark
+  skin:             solarized-dark  # dark | classic | solarized | solarized-dark
   date_format:      "%B %-d, %Y"   # e.g. "November 3, 2024"
   social_links:
     - { platform: github, user_url: "https://github.com/alexandrubunea" }

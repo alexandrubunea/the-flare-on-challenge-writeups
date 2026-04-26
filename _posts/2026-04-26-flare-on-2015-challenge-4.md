@@ -20,11 +20,11 @@ This write-up covers the fourth challenge of the 2015 Flare-On series. The objec
 
 Starting as usual, the file has no extension. Running exiftool on it reveals it is a Windows executable.
 
-![exiftool run on the program](/assets/images/2015/Challenge4/image.png)
+![exiftool run on the program]({{ "/assets/images/2015/Challenge4/image.png" | relative_url }})
 
 Throwing it into DIE confirms the most important detail: the program is packed with UPX.
 
-![DIE run on the program](/assets/images/2015/Challenge4/image-1.png)
+![DIE run on the program]({{ "/assets/images/2015/Challenge4/image-1.png" | relative_url }})
 
 The name `youPecks` is itself a hint, a phonetic play on "UPX."
 
@@ -38,9 +38,9 @@ upx -d youPecks -o unpacked_youPecks.exe
 
 Running exiftool and DIE again on the unpacked result shows it is a C++ binary compiled with the Visual Studio toolchain.
 
-![exiftool on unpacked program](/assets/images/2015/Challenge4/image-2.png)
+![exiftool on unpacked program]({{ "/assets/images/2015/Challenge4/image-2.png" | relative_url }})
 
-![DIE on unpacked program](/assets/images/2015/Challenge4/image-3.png)
+![DIE on unpacked program]({{ "/assets/images/2015/Challenge4/image-3.png" | relative_url }})
 
 ## 3. Static Analysis in Ghidra
 
@@ -54,7 +54,7 @@ DAT_004070a8 = FUN_00401350(DAT_00407090, DAT_00407098);
 
 The two arguments correspond to `argc` and `argv`. The function is renamed to `main` and its signature is updated to match the official Microsoft documentation.
 
-![Correct main signature](/assets/images/2015/Challenge4/image-4.png)
+![Correct main signature]({{ "/assets/images/2015/Challenge4/image-4.png" | relative_url }})
 
 ### 3.2 Early Exit Checks
 
@@ -87,7 +87,7 @@ The value `5` is hardcoded, so `iVar3 == 5` is always true, meaning the program 
 
 Running the unpacked binary confirms this behavior.
 
-![Running the program to test](/assets/images/2015/Challenge4/image-5.png)
+![Running the program to test]({{ "/assets/images/2015/Challenge4/image-5.png" | relative_url }})
 
 ### 3.3 Patching the Unpacked Binary
 
@@ -105,13 +105,13 @@ To bypass the hardcoded `5` check and continue analysis, the immediate value in 
 
 With `CMP ESI, 0x0` followed by `JNZ`, the program jumps past the early exit block whenever ESI is non-zero, which is always the case for any valid numeric input. The patched binary is exported as `unpacked_youPecks_patched.exe`.
 
-![Patched code in Ghidra](/assets/images/2015/Challenge4/image-6.png)
+![Patched code in Ghidra]({{ "/assets/images/2015/Challenge4/image-6.png" | relative_url }})
 
-![Saving the patched program](/assets/images/2015/Challenge4/image-7.png)
+![Saving the patched program]({{ "/assets/images/2015/Challenge4/image-7.png" | relative_url }})
 
 Running the patched binary with an argument still exits immediately, indicating there is more to understand.
 
-![Program behaving the same after patching](/assets/images/2015/Challenge4/image-8.png)
+![Program behaving the same after patching]({{ "/assets/images/2015/Challenge4/image-8.png" | relative_url }})
 
 ## 4. Dynamic Analysis in x32dbg
 
@@ -279,7 +279,7 @@ Running the original packed binary directly with the current hour as the argumen
 youPecks.exe 15
 ```
 
-![Flag reveal after running the binary with the current hour](/assets/images/2015/Challenge4/image-9.png)
+![Flag reveal after running the binary with the current hour]({{ "/assets/images/2015/Challenge4/image-9.png" | relative_url }})
 
 The program prints:
 
@@ -287,7 +287,7 @@ The program prints:
 Uhr1thm3tic@flare-on.com
 ```
 
-![Running the packed file](/assets/images/2015/Challenge4/image-10.png)
+![Running the packed file]({{ "/assets/images/2015/Challenge4/image-10.png" | relative_url }})
 
 **Flag: `Uhr1thm3tic@flare-on.com`**
 

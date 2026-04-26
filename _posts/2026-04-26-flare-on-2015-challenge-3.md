@@ -20,11 +20,11 @@ This write-up covers the third challenge of the 2015 Flare-On series. The object
 
 The challenge file is named `elfie` with no extension. It's notably large. Running exiftool on it:
 
-![exiftool run on the program](/assets/images/2015/Challenge3/image.png)
+![exiftool run on the program]({{ "/assets/images/2015/Challenge3/image.png" | relative_url }})
 
 Not much detail here beyond the fact that it targets Windows. Running it through DIE:
 
-![DIE run on the program](/assets/images/2015/Challenge3/image-1.png)
+![DIE run on the program]({{ "/assets/images/2015/Challenge3/image-1.png" | relative_url }})
 
 The size is explained immediately, it's a PyInstaller bundle. The binary is not a conventional executable but a self-contained Python application packed by PyInstaller.
 
@@ -32,17 +32,17 @@ The size is explained immediately, it's a PyInstaller bundle. The binary is not 
 
 To work with the bundled Python code, the PyInstaller archive needs to be unpacked first. A quick search leads to [pyinstxtractor](https://github.com/extremecoders-re/pyinstxtractor), a purpose-built extraction script:
 
-![Running pyinstxtractor on the program](/assets/images/2015/Challenge3/image-2.png)
+![Running pyinstxtractor on the program]({{ "/assets/images/2015/Challenge3/image-2.png" | relative_url }})
 
 The script extracts the bundle successfully and suggests using a Python decompiler on the resulting `.pyc` files. The main target is `elfie.pyc`.
 
 The tool of choice is `uncompyle6`, already available on the analysis machine. Running it against `elfie.pyc` immediately throws an error:
 
-![Error thrown when running uncompyle6](/assets/images/2015/Challenge3/image-3.png)
+![Error thrown when running uncompyle6]({{ "/assets/images/2015/Challenge3/image-3.png" | relative_url }})
 
 The key line is `Unknown type 79 (hex 0x4F)`, an invalid marshal type that causes uncompyle6 to abort. Before investigating `elfie.pyc` further, running the same command against `struct.pyc` (another file in the extracted directory) gives a clean result:
 
-![uncompyle6 result after running it on struct.pyc](/assets/images/2015/Challenge3/image-4.png)
+![uncompyle6 result after running it on struct.pyc]({{ "/assets/images/2015/Challenge3/image-4.png" | relative_url }})
 
 `struct.pyc` decompiles cleanly as Python 2.7's standard library `struct` module (magic number `62211`). It is legitimate, simply bundled alongside the application because it was built against Python 2.7. However, its presence in the extraction directory causes Python 3.10 to shadow its own `struct` module, which breaks any analysis tool that tries to import it. This explains subsequent `ImportError: bad magic number in 'struct'` errors that appear later.
 
@@ -55,9 +55,9 @@ RuntimeError: Bad magic number in .pyc file
 
 This raises the question of whether the magic number in `elfie.pyc` has been tampered with. Comparing both files side by side in HxD:
 
-![HxD view of elfie.pyc](/assets/images/2015/Challenge3/image-5.png)
+![HxD view of elfie.pyc]({{ "/assets/images/2015/Challenge3/image-5.png" | relative_url }})
 
-![HxD view of struct.pyc](/assets/images/2015/Challenge3/image-6.png)
+![HxD view of struct.pyc]({{ "/assets/images/2015/Challenge3/image-6.png" | relative_url }})
 
 The first four bytes are identical (`03 F3 0D 0A`) the correct Python 2.7 magic. The header is not the problem. Looking past the 8-byte header at the marshal body tells a different story: instead of a valid code object starting with `0x63` (`c`), `elfie.pyc` starts with `0x4F 0x30 0x4F 0x4F...`, not a marshal stream at all. The ASCII column reveals readable text and what appear to be base64 strings. The marshal body has been **replaced with obfuscated Python source code**.
 
@@ -67,7 +67,7 @@ Since `elfie.pyc` contains source rather than bytecode past its header, the appr
 
 Opening `elfie_body.py` in Notepad++:
 
-![elfie_body.py in Notepad++](/assets/images/2015/Challenge3/image-7.png)
+![elfie_body.py in Notepad++]({{ "/assets/images/2015/Challenge3/image-7.png" | relative_url }})
 
 One issue immediately: a variable name starts with a digit, which is invalid Python syntax. This happened because one extra byte was deleted along with the header. The fix is to prepend an underscore:
 
@@ -77,7 +77,7 @@ _0OO0OO00000OOOO0OOOOO0O00O0O0O0 = 'IRGppV0FJM3BRRlNwWGhNNG'
 
 The structure of the file becomes clear: variable names composed entirely of `O` and `0` characters, visually indistinguishable, accumulate fragments of a base64 string across hundreds of lines, which are then concatenated and decoded:
 
-![Evidence of base64 concatenation in Notepad++](/assets/images/2015/Challenge3/image-8.png)
+![Evidence of base64 concatenation in Notepad++]({{ "/assets/images/2015/Challenge3/image-8.png" | relative_url }})
 
 To safely observe what the script produces without executing the payload, the final `exec(...)` call is replaced with `print(...)`. The `NUL` byte at the end of the file is also removed.
 
@@ -92,15 +92,15 @@ Moving `elfie_body.py` two directories up (away from the extracted folder) resol
 
 The script runs successfully and produces a second, even more heavily obfuscated layer:
 
-![Result after running the script](/assets/images/2015/Challenge3/image-9.png)
+![Result after running the script]({{ "/assets/images/2015/Challenge3/image-9.png" | relative_url }})
 
 The output is a single massive one-liner. The code is copied into a new file and manually reformatted to make it readable. During the process of putting the code in order, the flag becomes visible, embedded as **reversed strings**, a further layer of obfuscation:
 
-![String of the flag found](/assets/images/2015/Challenge3/image-10.png)
+![String of the flag found]({{ "/assets/images/2015/Challenge3/image-10.png" | relative_url }})
 
 The full obfuscated structure with reversed string fragments visible:
 
-![Code organized in Notepad++](/assets/images/2015/Challenge3/image-11.png)
+![Code organized in Notepad++]({{ "/assets/images/2015/Challenge3/image-11.png" | relative_url }})
 
 Reversing the string yields the flag.
 
@@ -114,6 +114,6 @@ The flag was found embedded as a reversed string in the second layer of obfuscat
 
 One large base64 blob in the obfuscated code did not appear to be part of the flag logic. Decoding it produces a binary file beginning with `\xFF\xD8`, a JPEG. Cross-referencing its usage in the code reveals it is passed to `loadFromData` (itself stored reversed as `ataDmorFdaol`), a Qt method for loading image data:
 
-![Highlighted loadFromData usage in Notepad++](/assets/images/2015/Challenge3/image-12.png)
+![Highlighted loadFromData usage in Notepad++]({{ "/assets/images/2015/Challenge3/image-12.png" | relative_url }})
 
 The blob is simply the goat image used as the application's mascot, no flag relevance.
